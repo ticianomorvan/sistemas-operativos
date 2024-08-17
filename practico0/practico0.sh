@@ -66,3 +66,10 @@ echo -e "${BOLD}${BLUE}Trimming sample video with ffmpeg...$RESET"
 ffmpeg -i $(pwd)/test-video.mp4 -ss 00:00:02 -to 00:00:03 -c:v libx264 -c:a copy -b:v 2100k -pix_fmt yuv420p -y -loglevel error test-output.mp4
 
 echo -e "${BOLD}${B_GREEN}Video trimming process completed! Saved to $(pwd)/test-output.mp4$RESET"
+echo " "
+echo -e "${BOLD}${BLUE}Merging two audio tracks with ffmpeg...$RESET"
+
+# Ex. 9b
+ffmpeg -i $(pwd)/test-audio-1.opus -i $(pwd)/test-audio-2.opus -filter_complex '[0:a]volume=0.2[a0];[1:a]volume=1.0[a1];[a1][a0]amerge=inputs=2,pan=stereo|FL<c0+c2|FR<c1+c3[a]' -map '[a]' -y -loglevel error test-output.opus
+
+echo -e "${BOLD}${B_GREEN}Audio merging process completed! Saved to $(pwd)/test-output.opus$RESET"
